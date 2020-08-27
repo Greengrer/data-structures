@@ -35,9 +35,4 @@ public class ArrayQueue implements Queue{
     public int size(){
         return (size);
     }
-
-    public Object [] getQueue(){
-        return queue;
-    }
-
 }
