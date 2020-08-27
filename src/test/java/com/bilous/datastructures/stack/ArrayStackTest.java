@@ -18,7 +18,6 @@ public class ArrayStackTest {
         }
 
         //then
-        assertEquals(3, stackWithThreeElements.getStack().length);
         assertEquals(2, stackWithThreeElements.peek());
         assertEquals(2, stackWithThreeElements.pop());
         assertEquals(1, stackWithThreeElements.pop());
