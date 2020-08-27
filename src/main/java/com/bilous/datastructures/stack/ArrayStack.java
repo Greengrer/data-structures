@@ -36,8 +36,4 @@ public class ArrayStack implements Stack{
     public int size(){
        return size;
     }
-
-    public Object [] getStack(){
-        return stack;
-    }
 }
