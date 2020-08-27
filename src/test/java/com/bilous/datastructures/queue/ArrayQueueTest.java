@@ -19,7 +19,6 @@ public class ArrayQueueTest {
         }
 
         //then
-        assertEquals(3, queueWithThreeElements.getQueue().length);
         assertEquals(0, queueWithThreeElements.dequeue());
         assertEquals(1, queueWithThreeElements.dequeue());
         assertEquals(2, queueWithThreeElements.dequeue());
