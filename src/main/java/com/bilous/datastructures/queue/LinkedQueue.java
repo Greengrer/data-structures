@@ -4,7 +4,7 @@ public class LinkedQueue implements Queue{
 
     private Node head;
     private Node tail;
-    int size;
+    private int size;
 
     @Override
     public void enqueue(Object value) {
