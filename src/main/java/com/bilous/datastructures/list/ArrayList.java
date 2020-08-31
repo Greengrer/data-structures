@@ -2,8 +2,8 @@ package com.bilous.datastructures.list;
 
 public class ArrayList implements List{
 
-    Object [] list = new Object[2];
-    int size;
+    private Object [] list = new Object[2];
+    private int size;
 
     @Override
     public void add(Object value) {
