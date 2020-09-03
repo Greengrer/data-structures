@@ -2,86 +2,80 @@ package com.bilous.datastructures.list;
 
 public class ArrayList implements List{
 
-    private Object [] list = new Object[2];
+    private static final int DEFAULT_INITIAL_CAPACITY = 2;
+    private Object [] array;
     private int size;
+
+    public ArrayList() {
+        this(DEFAULT_INITIAL_CAPACITY);
+    }
+    public ArrayList(int initialCapacity) {
+        array = new Object [initialCapacity];
+    }
+
+
 
     @Override
     public void add(Object value) {
-        if (size == list.length) {
-            Object [] temp = new Object[(list.length * 3) / 2];
-            for (int i = 0; i < size; i++) {
-                temp[i] = list[i];
-            }
-            list = temp;
-        }
-        list[size] = value;
-        size++;
+        add(value, size);
     }
 
     @Override
     public void add(Object value, int index) {
-        validateIndex(index, size + 1);
-        if (size == list.length) {
-            Object [] temp = new Object[(list.length * 3) / 2];
-            for (int i = 0; i < index; i++) {
-                temp[i] = list[i];
+        validateIndexForAdd(index);
+
+        if (size == array.length) {
+            Object [] newArray = new Object[(array.length * 3) / 2];
+            for (int i = 0; i < size; i++) {
+                newArray[i] = array[i];
             }
-            temp[index] = value;
-            for (int i = index; i < size; i++) {
-                temp[i + 1] = list[i];
-            }
-            list = temp;
-        } else {
-            for (int i = size; i > index; i--) {
-                list[i] = list[i - 1];
-            }
-            list[index] = value;
+             array = newArray;
         }
+
+        for (int i = size; i > index; i--) {
+            array[i] = array[i - 1];
+        }
+
+        array[index] = value;
         size++;
     }
 
     @Override
     public Object remove(int index) {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
-        validateIndex(index, size);
-        Object removedElement = list[index];
+
+        validateIndex(index);
+        Object removedElement = array[index];
+
         for (int i = index + 1; i < size; i++) {
-            list[i - 1] = list[i];
+            array[i - 1] = array[i];
         }
-        list[size - 1] = null;
+
+        array[size - 1] = null;
         size--;
         return removedElement;
     }
 
     @Override
     public Object get(int index) {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
-        validateIndex(index, size);
-        return list[index];
+        validateIndex(index);
+        return array[index];
     }
 
     @Override
     public Object set(Object value, int index) {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
-        validateIndex(index, size);
-        list[index] = value;
-        return list[index];
+        validateIndex(index);
+        Object changedElement = array[index];
+        array[index] = value;
+        return changedElement;
     }
 
     @Override
     public void clear() {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
+
         for (int i = 0; i < size; i++) {
-            list[i] = null;
+            array[i] = null;
         }
+
         size = 0;
     }
 
@@ -92,52 +86,47 @@ public class ArrayList implements List{
 
     @Override
     public boolean isEmpty() {
-        return (size == 0);
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object value) {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
-        for (int i = 0; i < size; i++) {
-            if (value == list[i]){
-                return true;
-            }
-        }
-        return false;
+       return indexOf(value) != -1;
     }
 
     @Override
     public int indexOf(Object value) {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
+
         for (int i = 0; i < size; i++) {
-            if (value == list[i]) {
+            if (value.equals(array[i])) {
                 return i;
             }
         }
+
         return -1;
     }
 
     @Override
     public int lastIndexOf(Object value) {
-        if (size == 0){
-            throw new IllegalArgumentException("The list is empty.");
-        }
-        int lastIndexOf = -1;
-        for (int i = 0; i < size; i++) {
-            if (value == list[i]) {
-                lastIndexOf = i;
+
+        for (int i = size - 1; i >= 0; i--) {
+            if (value.equals(array[i])) {
+                return i;
             }
         }
-        return lastIndexOf;
+
+        return -1;
     }
 
-    private void validateIndex(int index, int listSize) {
-        if (index < 0 || index >= listSize) {
-            throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + (size - 1));
+    private void validateIndexForAdd(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(inclusive.)");
+        }
+    }
+
+    private void validateIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(exclusive.)");
         }
     }
 
@@ -147,18 +136,12 @@ public class ArrayList implements List{
             return "[]";
         } else {
             String string = "[";
+
             for (int i = 0; i < size - 1; i++) {
-                if (list[i] == null){
-                    string += ", ";
-                } else {
-                    string += (list[i].toString() + ", ");
-                }
+                    string += (array[i] + ", ");
             }
-            if (list[size - 1] == null) {
-                string += "]";
-            } else {
-                string += (list[size - 1] + "]");
-            }
+
+            string += (array[size - 1] + "]");
             return string;
         }
     }
