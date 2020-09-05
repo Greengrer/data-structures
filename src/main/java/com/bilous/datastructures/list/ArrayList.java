@@ -26,6 +26,7 @@ public class ArrayList implements List{
 
         if (size == array.length) {
             Object [] newArray = new Object[(array.length * 3) / 2];
+
             for (int i = 0; i < size; i++) {
                 newArray[i] = array[i];
             }
@@ -98,6 +99,7 @@ public class ArrayList implements List{
     public int indexOf(Object value) {
 
         for (int i = 0; i < size; i++) {
+
             if (value.equals(array[i])) {
                 return i;
             }
@@ -110,6 +112,7 @@ public class ArrayList implements List{
     public int lastIndexOf(Object value) {
 
         for (int i = size - 1; i >= 0; i--) {
+
             if (value.equals(array[i])) {
                 return i;
             }
@@ -119,12 +122,14 @@ public class ArrayList implements List{
     }
 
     private void validateIndexForAdd(int index) {
+
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(inclusive.)");
         }
     }
 
     private void validateIndex(int index) {
+
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(exclusive.)");
         }
@@ -132,6 +137,7 @@ public class ArrayList implements List{
 
     @Override
     public String toString(){
+
         if (isEmpty()) {
             return "[]";
         } else {

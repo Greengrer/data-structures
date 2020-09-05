@@ -15,10 +15,12 @@ public abstract class AbstractListTest {
     public void before() {
         emptyList = getList();
         listWithThreeElements = getList();
+        listWithOneElement = getList();
+
         for (int i = 0; i < 3; i++) {
             listWithThreeElements.add(i);
         }
-        listWithOneElement = getList();
+
         listWithOneElement.add(1);
     }
 
@@ -26,9 +28,11 @@ public abstract class AbstractListTest {
 
     @Test
     public void testAddAndGet() {
+
         for (int i = 0; i < 3; i++) {
             assertEquals(i, listWithThreeElements.get(i));
         }
+
         assertEquals(1, listWithOneElement.get(0));
     }
 
@@ -89,6 +93,7 @@ public abstract class AbstractListTest {
         for (int i = 0; i < 2; i++) {
             listWithThreeElements.add(i);
         }
+
         listWithThreeElements.add(2, 1);
         //then
         assertEquals(0, listWithThreeElements.get(0));

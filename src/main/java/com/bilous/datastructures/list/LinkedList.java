@@ -11,6 +11,7 @@ public class LinkedList implements List {
     @Override
     public void add(Object value) {
         Node newNode = new Node(value);
+
         if (size == 0) {
             head = tail = newNode;
         } else {
@@ -18,23 +19,28 @@ public class LinkedList implements List {
             newNode.setPrevious(tail);
             tail = newNode;
         }
+
         size++;
     }
     @Override
     public void add(Object value, int index) {
+
         if (index == size) {
             add(value);
         }
+
         validateIndex(index);
         Node newNode = new Node(value);
         Node current = getNodeByIndex(index);
         newNode.setPrevious(current.getPrevious());
         newNode.setNext(current);
         current.setPrevious(newNode);
+
         if (newNode.getPrevious() != null) {
             current = newNode.getPrevious();
             current.setNext(newNode);
         }
+
         size++;
     }
 
@@ -42,6 +48,7 @@ public class LinkedList implements List {
     public Object remove(int index) {
         validateIndex(index);
         Object removedElement;
+
         if (size == 1) {
             removedElement = head.getValue();
             head = null;
@@ -66,6 +73,7 @@ public class LinkedList implements List {
             connector = connector.getNext();
             connector.setPrevious(nodeToRemove.getPrevious());
         }
+
             size--;
             return removedElement;
     }
@@ -111,10 +119,13 @@ public class LinkedList implements List {
     @Override
     public int indexOf(Object value) {
         Node current = head;
+
         for (int i = 0; i < size; i++) {
+
             if (value.equals(current.getValue())) {
                 return i;
             }
+
             current = current.getNext();
         }
 
@@ -124,10 +135,13 @@ public class LinkedList implements List {
     @Override
     public int lastIndexOf(Object value) {
         Node current = tail;
+
         for (int i = size - 1; i >= 0; i--) {
+
             if (value.equals(current.getValue())) {
                 return i;
             }
+
             current = current.getPrevious();
         }
 
@@ -135,6 +149,7 @@ public class LinkedList implements List {
     }
 
     private void validateIndex(int index) {
+
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(exclusive.)");
         }
@@ -142,11 +157,13 @@ public class LinkedList implements List {
 
     @Override
     public String toString(){
+
         if (isEmpty()) {
             return "[]";
         } else {
             String result = "[";
             Node current = head;
+
             for (int i = 0; i < size - 1; i++) {
                 result += (current.getValue() + ", ");
                 current = current.getNext();
@@ -159,17 +176,21 @@ public class LinkedList implements List {
     
     private Node getNodeByIndex(int index) {
         Node current;
+
         if (index < size / 2) {
             current = head;
+
             for (int i = 0; i < index; i++) {
                 current = current.getNext();
             }
         } else {
             current = tail;
+
             for (int i = size - 1; i > index; i--) {
                 current = current.getPrevious();
             }
         }
+
         return current;
     }
 }
