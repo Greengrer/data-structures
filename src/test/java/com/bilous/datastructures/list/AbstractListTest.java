@@ -17,7 +17,6 @@ public abstract class AbstractListTest {
         listWithThreeElements = getList();
         for (int i = 0; i < 3; i++) {
             listWithThreeElements.add(i);
-            System.out.println(listWithThreeElements.toString());
         }
         listWithOneElement = getList();
         listWithOneElement.add(1);
