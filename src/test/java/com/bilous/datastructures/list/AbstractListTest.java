@@ -9,6 +9,7 @@ public abstract class AbstractListTest {
 
     List emptyList;
     List listWithThreeElements;
+    List listWithOneElement;
 
     @Before
     public void before() {
@@ -16,7 +17,10 @@ public abstract class AbstractListTest {
         listWithThreeElements = getList();
         for (int i = 0; i < 3; i++) {
             listWithThreeElements.add(i);
+            System.out.println(listWithThreeElements.toString());
         }
+        listWithOneElement = getList();
+        listWithOneElement.add(1);
     }
 
     abstract List getList();
@@ -26,6 +30,7 @@ public abstract class AbstractListTest {
         for (int i = 0; i < 3; i++) {
             assertEquals(i, listWithThreeElements.get(i));
         }
+        assertEquals(1, listWithOneElement.get(0));
     }
 
     @Test
@@ -44,10 +49,12 @@ public abstract class AbstractListTest {
         assertEquals(0, listWithThreeElements.set("A", 0));
         assertEquals(1, listWithThreeElements.set("B", 1));
         assertEquals(2, listWithThreeElements.set("C", 2));
+        assertEquals(1, listWithOneElement.set("D", 0));
         //then
         assertEquals("A", listWithThreeElements.get(0));
         assertEquals("B", listWithThreeElements.get(1));
         assertEquals("C", listWithThreeElements.get(2));
+        assertEquals("D", listWithOneElement.get(0));
     }
 
     @Test
@@ -64,17 +71,15 @@ public abstract class AbstractListTest {
     public void testSize() {
         //then
         assertEquals(3, listWithThreeElements.size());
+        assertEquals(1, listWithOneElement.size());
         assertEquals(0, emptyList.size());
     }
 
     @Test
     public void testIsEmpty() {
-        //when
-        for (int i = 0; i < 3; i++) {
-            listWithThreeElements.add(i);
-        }
         //then
         assertFalse(listWithThreeElements.isEmpty());
+        assertFalse(listWithOneElement.isEmpty());
         assertTrue(emptyList.isEmpty());
     }
 
@@ -122,9 +127,12 @@ public abstract class AbstractListTest {
 
         //when
         listWithThreeElements.clear();
+        listWithOneElement.clear();
         //then
         assertEquals(0, listWithThreeElements.size());
+        assertEquals(0, listWithOneElement.size());
         assertTrue(listWithThreeElements.isEmpty());
+        assertTrue(listWithOneElement.isEmpty());
     }
 
     @Test
@@ -135,11 +143,19 @@ public abstract class AbstractListTest {
     }
 
     @Test
+    public void testContainsOnListWithOneElement() {
+        //then
+        assertTrue(listWithOneElement.contains(1));
+        assertFalse(listWithOneElement.contains(-1));
+    }
+
+    @Test
     public void testIndexOf() {
         listWithThreeElements.set(1, 2);
         //then
         assertEquals(0, listWithThreeElements.indexOf(0));
         assertEquals(1, listWithThreeElements.indexOf(1));
+        assertEquals(0, listWithOneElement.indexOf(1));
     }
 
     @Test
@@ -148,11 +164,13 @@ public abstract class AbstractListTest {
         listWithThreeElements.set(0, 2);
         assertEquals(2, listWithThreeElements.lastIndexOf(0));
         assertEquals(1, listWithThreeElements.lastIndexOf(1));
+        assertEquals(0, listWithOneElement.lastIndexOf(1));
     }
 
     @Test
     public void testToString() {
         assertEquals("[0, 1, 2]", listWithThreeElements.toString());
+        assertEquals("[1]", listWithOneElement.toString());
         assertEquals("[]", emptyList.toString());
 
     }

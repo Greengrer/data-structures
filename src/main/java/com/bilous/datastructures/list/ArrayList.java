@@ -135,14 +135,15 @@ public class ArrayList implements List{
         if (isEmpty()) {
             return "[]";
         } else {
-            String string = "[";
+            String result = "[";
 
             for (int i = 0; i < size - 1; i++) {
-                    string += (array[i] + ", ");
+                    result += (array[i] + ", ");
             }
 
-            string += (array[size - 1] + "]");
-            return string;
+            result += (array[size - 1] + "]");
+            return result;
         }
     }
+
 }
