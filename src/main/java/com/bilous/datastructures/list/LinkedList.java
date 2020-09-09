@@ -1,42 +1,30 @@
 package com.bilous.datastructures.list;
 
-import java.util.Objects;
-
-public class LinkedList implements List {
+public class LinkedList extends AbstractList implements List {
 
     private int size;
     private Node head;
     private Node tail;
 
     @Override
-    public void add(Object value) {
+    public void add(Object value, int index) {
         Node newNode = new Node(value);
-
+        validateIndexForAdd(index);
         if (size == 0) {
             head = tail = newNode;
-        } else {
+        } else if (index == size) {
             tail.setNext(newNode);
             newNode.setPrevious(tail);
             tail = newNode;
-        }
-
-        size++;
-    }
-    @Override
-    public void add(Object value, int index) {
-
-        if (index == size) {
-            add(value);
-        }
-
-        validateIndex(index);
-        Node newNode = new Node(value);
-        Node current = getNodeByIndex(index);
-        newNode.setPrevious(current.getPrevious());
-        newNode.setNext(current);
-        current.setPrevious(newNode);
-
-        if (newNode.getPrevious() != null) {
+        } else if (index == 0) {
+            tail.setNext(newNode);
+            newNode.setPrevious(tail);
+            tail = newNode;
+        } else {
+            Node current = getNode(index);
+            newNode.setPrevious(current.getPrevious());
+            newNode.setNext(current);
+            current.setPrevious(newNode);
             current = newNode.getPrevious();
             current.setNext(newNode);
         }
@@ -56,7 +44,7 @@ public class LinkedList implements List {
             size--;
             return removedElement;
         }
-        
+
         if (index == 0) {
             removedElement = head.getValue();
             head = head.getNext();
@@ -66,7 +54,7 @@ public class LinkedList implements List {
             tail = tail.getPrevious();
             tail.setNext(null);
         } else {
-            Node nodeToRemove = getNodeByIndex(index);
+            Node nodeToRemove = getNode(index);
             removedElement = nodeToRemove.getValue();
             Node connector = nodeToRemove.getPrevious();
             connector.setNext(nodeToRemove.getNext());
@@ -74,41 +62,59 @@ public class LinkedList implements List {
             connector.setPrevious(nodeToRemove.getPrevious());
         }
 
-            size--;
-            return removedElement;
+        size--;
+        return removedElement;
     }
-    
+
 
     @Override
     public Object get(int index) {
         validateIndex(index);
-        Node current = getNodeByIndex(index);
+        Node current = getNode(index);
         return current.getValue();
     }
 
     @Override
     public Object set(Object value, int index) {
         validateIndex(index);
-        Node nodeToChange = getNodeByIndex(index);
+        Node nodeToChange = getNode(index);
         Object changedElement = nodeToChange.getValue();
         nodeToChange.setValue(value);
         return changedElement;
     }
-
+/*
     @Override
     public void clear() {
+        Node currentFromHead = head;
+        Node currentFromTail = tail;
+
+        for (int i = 0; i < size; i++) {
+            currentFromHead = currentFromHead.getNext();
+            currentFromHead.setPrevious(null);
+            currentFromTail = currentFromTail.getPrevious();
+            currentFromTail.setNext(null);
+        }
+
         tail = head = null;
         size = 0;
     }
+*/
 
     @Override
-    public int size() {
-        return size;
-    }
+    public void clear() {
+        Node current = head;
+        Node next;
 
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
+        for (int i = 0; i < size; i++) {
+            next = current.getNext();
+            current.setNext(null);
+            current.setPrevious(null);
+            current.setValue(null);
+            current = next;
+        }
+
+        tail = head = null;
+        size = 0;
     }
 
     @Override
@@ -148,33 +154,7 @@ public class LinkedList implements List {
         return -1;
     }
 
-    private void validateIndex(int index) {
-
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(exclusive.)");
-        }
-    }
-
-    @Override
-    public String toString(){
-
-        if (isEmpty()) {
-            return "[]";
-        } else {
-            String result = "[";
-            Node current = head;
-
-            for (int i = 0; i < size - 1; i++) {
-                result += (current.getValue() + ", ");
-                current = current.getNext();
-            }
-
-            result += (tail.getValue() + "]");
-            return result;
-        }
-    }
-    
-    private Node getNodeByIndex(int index) {
+    private Node getNode(int index) {
         Node current;
 
         if (index < size / 2) {
@@ -193,5 +173,26 @@ public class LinkedList implements List {
 
         return current;
     }
+
+    @Override
+    public String toString() {
+        if (isEmpty()) {
+            return "[]";
+        } else {
+            StringBuilder builder = new StringBuilder();
+            builder.append("[");
+            Node current = head;
+
+            for (int i = 0; i < size - 1; i++) {
+                builder.append(current.getValue());
+                builder.append(", ");
+                current = current.getNext();
+            }
+
+            builder.append(tail.getValue());
+            builder.append("]");
+            return builder.toString();
+        }
+    }
+
 }
-    

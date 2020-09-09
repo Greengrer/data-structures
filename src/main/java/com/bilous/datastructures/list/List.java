@@ -1,6 +1,6 @@
 package com.bilous.datastructures.list;
 
-public interface List {
+public interface List/* extends Iterable*/{
     // List, Set, Map
         // add value to the end of the list
         void add(Object value);

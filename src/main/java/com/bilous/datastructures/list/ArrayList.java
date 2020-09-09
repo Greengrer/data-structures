@@ -1,23 +1,21 @@
 package com.bilous.datastructures.list;
 
-public class ArrayList implements List{
+public class ArrayList extends AbstractList implements List {
 
     private static final int DEFAULT_INITIAL_CAPACITY = 2;
-    private Object [] array;
+    private Object[] array;
     private int size;
+
+ /*   Iterator iterator(){
+
+    }*/
 
     public ArrayList() {
         this(DEFAULT_INITIAL_CAPACITY);
     }
+
     public ArrayList(int initialCapacity) {
-        array = new Object [initialCapacity];
-    }
-
-
-
-    @Override
-    public void add(Object value) {
-        add(value, size);
+        array = new Object[initialCapacity];
     }
 
     @Override
@@ -25,17 +23,13 @@ public class ArrayList implements List{
         validateIndexForAdd(index);
 
         if (size == array.length) {
-            Object [] newArray = new Object[(array.length * 3) / 2];
+            Object[] newArray = new Object[((array.length * 3) / 2) + 1];
 
-            for (int i = 0; i < size; i++) {
-                newArray[i] = array[i];
-            }
-             array = newArray;
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
         }
 
-        for (int i = size; i > index; i--) {
-            array[i] = array[i - 1];
-        }
+        if (size - index >= 0) System.arraycopy(array, index, array, index + 1, size - index);
 
         array[index] = value;
         size++;
@@ -47,9 +41,7 @@ public class ArrayList implements List{
         validateIndex(index);
         Object removedElement = array[index];
 
-        for (int i = index + 1; i < size; i++) {
-            array[i - 1] = array[i];
-        }
+        if (size - index + 1 >= 0) System.arraycopy(array, index + 1, array, index + 1 - 1, size - index + 1);
 
         array[size - 1] = null;
         size--;
@@ -81,18 +73,8 @@ public class ArrayList implements List{
     }
 
     @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-    @Override
     public boolean contains(Object value) {
-       return indexOf(value) != -1;
+        return indexOf(value) != -1;
     }
 
     @Override
@@ -121,34 +103,24 @@ public class ArrayList implements List{
         return -1;
     }
 
-    private void validateIndexForAdd(int index) {
-
-        if (index < 0 || index > size) {
-            throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(inclusive.)");
-        }
-    }
-
-    private void validateIndex(int index) {
-
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(exclusive.)");
-        }
-    }
-
     @Override
-    public String toString(){
+    public String toString() {
 
         if (isEmpty()) {
             return "[]";
         } else {
-            String result = "[";
+            StringBuilder builder = new StringBuilder();
+
+            builder.append("[");
 
             for (int i = 0; i < size - 1; i++) {
-                    result += (array[i] + ", ");
+                builder.append(array[i]);
+                builder.append(", ");
             }
 
-            result += (array[size - 1] + "]");
-            return result;
+            builder.append(array[size - 1]);
+            builder.append("]");
+            return builder.toString();
         }
     }
 
