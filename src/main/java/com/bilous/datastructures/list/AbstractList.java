@@ -1,12 +1,14 @@
 package com.bilous.datastructures.list;
 
-public abstract class AbstractList{
+public abstract class AbstractList<T> implements List<T> {
 
-    private int size;
+    public int size;
 
-    abstract void add(Object value, int index);
+    public abstract void add(T value, int index);
 
-    public void add(Object value) { add(value, size);}
+    public void add(T value) {
+        add(value, size);
+    }
 
     public int size() {
         return size;
@@ -16,16 +18,16 @@ public abstract class AbstractList{
         return size == 0;
     }
 
-    public void validateIndex(int index) {
+    protected void validateIndex(int index) {
 
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(exclusive.)");
         }
     }
 
-    public void validateIndexForAdd(int index) {
+    protected void validateIndexForAdd(int index) {
 
-        if (index < 0 || index >= size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index " + index + " is out of these bounds: from 0 to " + size + "(inclusive.)");
         }
     }

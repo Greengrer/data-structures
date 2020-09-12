@@ -2,88 +2,90 @@ package com.bilous.datastructures.list;
 
 import org.junit.Before;
 import org.junit.Test;
+import java.util.Iterator;
 
 import static org.junit.Assert.*;
 
 public abstract class AbstractListTest {
 
-    List emptyList;
-    List listWithThreeElements;
-    List listWithOneElement;
+    List emptyIntegerList;
+    List integerListWithThreeElements;
+    List integerListWithOneElement;
 
     @Before
     public void before() {
-        emptyList = getList();
-        listWithThreeElements = getList();
-        listWithOneElement = getList();
+        emptyIntegerList = getIntegerList();
+        integerListWithThreeElements = getIntegerList();
+        integerListWithOneElement = getIntegerList();
 
         for (int i = 0; i < 3; i++) {
-            listWithThreeElements.add(i);
+            integerListWithThreeElements.add(i);
         }
 
-        listWithOneElement.add(1);
+        integerListWithOneElement.add(1);
     }
 
-    abstract List getList();
+    abstract List<?> getIntegerList();
+
 
     @Test
     public void testAddAndGet() {
 
         for (int i = 0; i < 3; i++) {
-            assertEquals(i, listWithThreeElements.get(i));
+            assertEquals(i, integerListWithThreeElements.get(i));
         }
 
-        assertEquals(1, listWithOneElement.get(0));
+        assertEquals(1, integerListWithOneElement.get(0));
     }
 
     @Test
     public void testGetByIndexHigherThanBothBounds() {
-        assertThrows(IndexOutOfBoundsException.class, () -> emptyList.get(1));
+        assertThrows(IndexOutOfBoundsException.class, () -> emptyIntegerList.get(1));
     }
 
     @Test
     public void testGetByIndexLowerThanBothBounds() {
-        assertThrows(IndexOutOfBoundsException.class, () -> emptyList.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> emptyIntegerList.get(-1));
     }
 
     @Test
     public void testSet() {
         //when
-        assertEquals(0, listWithThreeElements.set("A", 0));
-        assertEquals(1, listWithThreeElements.set("B", 1));
-        assertEquals(2, listWithThreeElements.set("C", 2));
-        assertEquals(1, listWithOneElement.set("D", 0));
+        assertEquals(0, integerListWithThreeElements.set(3, 0));
+        assertEquals(1, integerListWithThreeElements.set(4, 1));
+        assertEquals(2, integerListWithThreeElements.set(5, 2));
+        assertEquals(1, integerListWithOneElement.set(2, 0));
         //then
-        assertEquals("A", listWithThreeElements.get(0));
-        assertEquals("B", listWithThreeElements.get(1));
-        assertEquals("C", listWithThreeElements.get(2));
-        assertEquals("D", listWithOneElement.get(0));
+        assertEquals(3, integerListWithThreeElements.get(0));
+        assertEquals(4, integerListWithThreeElements.get(1));
+        assertEquals(5, integerListWithThreeElements.get(2));
+        assertEquals(2, integerListWithOneElement.get(0));
     }
 
     @Test
     public void testSetByIndexHigherThanBothBounds() {
-        assertThrows(IndexOutOfBoundsException.class, () -> emptyList.set(null, 1));
+        assertThrows(IndexOutOfBoundsException.class, () -> emptyIntegerList.set(null, 1));
     }
 
     @Test
     public void testSetByIndexLowerThanBothBounds() {
-        assertThrows(IndexOutOfBoundsException.class, () -> emptyList.set(null, 1));
+        assertThrows(IndexOutOfBoundsException.class, () -> emptyIntegerList.set(null, 1));
     }
 
     @Test
     public void testSize() {
         //then
-        assertEquals(3, listWithThreeElements.size());
-        assertEquals(1, listWithOneElement.size());
-        assertEquals(0, emptyList.size());
+        assertEquals(3, integerListWithThreeElements.size());
+        assertEquals(1, integerListWithOneElement.size());
+        assertEquals(0, emptyIntegerList.size());
     }
 
     @Test
     public void testIsEmpty() {
         //then
-        assertFalse(listWithThreeElements.isEmpty());
-        assertFalse(listWithOneElement.isEmpty());
-        assertTrue(emptyList.isEmpty());
+        assertFalse(integerListWithThreeElements.isEmpty());
+        assertFalse(integerListWithOneElement.isEmpty());
+        assertTrue(emptyIntegerList.isEmpty());
     }
 
     @Test
@@ -91,104 +93,123 @@ public abstract class AbstractListTest {
 
         //when
         for (int i = 0; i < 2; i++) {
-            listWithThreeElements.add(i);
+            integerListWithThreeElements.add(i);
         }
 
-        listWithThreeElements.add(2, 1);
+        integerListWithThreeElements.add(2, 1);
         //then
-        assertEquals(0, listWithThreeElements.get(0));
-        assertEquals(2, listWithThreeElements.get(1));
-        assertEquals(1, listWithThreeElements.get(2));
+        assertEquals(0, integerListWithThreeElements.get(0));
+        assertEquals(2, integerListWithThreeElements.get(1));
+        assertEquals(1, integerListWithThreeElements.get(2));
     }
 
     @Test
     public void testAddByIndexOutOfBoundsPlusOne(){
-        assertThrows(IndexOutOfBoundsException.class, () -> listWithThreeElements.add(null, 4));
+        assertThrows(IndexOutOfBoundsException.class, () -> integerListWithThreeElements.add(null, 4));
 
     }
 
     @Test
     public void testRemove() {
-        listWithThreeElements.remove(1);
+        integerListWithThreeElements.remove(1);
         //then
-        assertEquals(2, listWithThreeElements.size());
-        assertEquals(2, listWithThreeElements.get(1));
+        assertEquals(2, integerListWithThreeElements.size());
+        assertEquals(2, integerListWithThreeElements.get(1));
     }
 
     @Test
     public void testRemoveOnIndexOutOfBounds() {
-        assertThrows(IndexOutOfBoundsException.class, () -> listWithThreeElements.remove(3));
+        assertThrows(IndexOutOfBoundsException.class, () -> integerListWithThreeElements.remove(3));
 
     }
 
     @Test
-    public void testRemoveOnEmptyList() {
-        assertThrows(IndexOutOfBoundsException.class, () -> emptyList.remove(0));
+    public void testRemoveOnintegeremptyIntegerList() {
+        assertThrows(IndexOutOfBoundsException.class, () -> emptyIntegerList.remove(0));
     }
 
     @Test
     public void testClear() {
 
         //when
-        listWithThreeElements.clear();
-        listWithOneElement.clear();
+        integerListWithThreeElements.clear();
+        integerListWithOneElement.clear();
         //then
-        assertEquals(0, listWithThreeElements.size());
-        assertEquals(0, listWithOneElement.size());
-        assertTrue(listWithThreeElements.isEmpty());
-        assertTrue(listWithOneElement.isEmpty());
+        assertEquals(0, integerListWithThreeElements.size());
+        assertEquals(0, integerListWithOneElement.size());
+        assertTrue(integerListWithThreeElements.isEmpty());
+        assertTrue(integerListWithOneElement.isEmpty());
     }
 
     @Test
     public void testContains() {
         //then
-        assertTrue(listWithThreeElements.contains(1));
-        assertFalse(listWithThreeElements.contains(-1));
+        assertTrue(integerListWithThreeElements.contains(1));
+        assertFalse(integerListWithThreeElements.contains(-1));
     }
 
     @Test
-    public void testContainsOnListWithOneElement() {
+    public void testContainsOnintegerListWithOneElement() {
         //then
-        assertTrue(listWithOneElement.contains(1));
-        assertFalse(listWithOneElement.contains(-1));
+        assertTrue(integerListWithOneElement.contains(1));
+        assertFalse(integerListWithOneElement.contains(-1));
     }
 
     @Test
     public void testIndexOf() {
-        listWithThreeElements.set(1, 2);
+        integerListWithThreeElements.set(1, 2);
         //then
-        assertEquals(0, listWithThreeElements.indexOf(0));
-        assertEquals(1, listWithThreeElements.indexOf(1));
-        assertEquals(0, listWithOneElement.indexOf(1));
+        assertEquals(0, integerListWithThreeElements.indexOf(0));
+        assertEquals(1, integerListWithThreeElements.indexOf(1));
+        assertEquals(0, integerListWithOneElement.indexOf(1));
     }
 
     @Test
     public void testLastIndexOf() {
         //when
-        listWithThreeElements.set(0, 2);
-        assertEquals(2, listWithThreeElements.lastIndexOf(0));
-        assertEquals(1, listWithThreeElements.lastIndexOf(1));
-        assertEquals(0, listWithOneElement.lastIndexOf(1));
+        integerListWithThreeElements.set(0, 2);
+        assertEquals(2, integerListWithThreeElements.lastIndexOf(0));
+        assertEquals(1, integerListWithThreeElements.lastIndexOf(1));
+        assertEquals(0, integerListWithOneElement.lastIndexOf(1));
     }
 
     @Test
     public void testToString() {
-        assertEquals("[0, 1, 2]", listWithThreeElements.toString());
-        assertEquals("[1]", listWithOneElement.toString());
-        assertEquals("[]", emptyList.toString());
+        assertEquals("[0, 1, 2]", integerListWithThreeElements.toString());
+        assertEquals("[1]", integerListWithOneElement.toString());
+        assertEquals("[]", emptyIntegerList.toString());
 
     }
 
     @Test
     public void testManualConstructorVulnerability() {
-        listWithThreeElements = new ArrayList(3);
-        assertEquals(0, listWithThreeElements.size());
+        integerListWithThreeElements = new ArrayList<>(3);
+        assertEquals(0, integerListWithThreeElements.size());
     }
 
     @Test
     public void testDefaultConstructorVulnerability() {
-        listWithThreeElements = new ArrayList();
-        assertEquals(0, listWithThreeElements.size());
+        integerListWithThreeElements = new ArrayList<>();
+        assertEquals(0, integerListWithThreeElements.size());
+    }
+
+    @Test
+    public void testIteratorOnIntegerList(){
+        Iterator<Integer> iterator = integerListWithThreeElements.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(0, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(1, iterator.next());
+        assertTrue(iterator.hasNext());
+        assertEquals(2, iterator.next());
+        assertFalse(iterator.hasNext());
+
+    }
+
+    @Test
+    public void testIteratorOnEmptyIntegerList(){
+        Iterator<Integer> iterator = emptyIntegerList.iterator();
+        assertFalse(iterator.hasNext());
     }
 
 }

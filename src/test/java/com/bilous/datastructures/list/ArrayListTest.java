@@ -2,8 +2,8 @@ package com.bilous.datastructures.list;
 
 public class ArrayListTest extends AbstractListTest {
 
-    public List getList(){
-        return new ArrayList();
+    public List<Integer> getIntegerList(){
+        return new ArrayList<>();
     }
 
 }

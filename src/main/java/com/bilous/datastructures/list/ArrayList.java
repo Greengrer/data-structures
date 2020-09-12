@@ -1,32 +1,31 @@
 package com.bilous.datastructures.list;
 
-public class ArrayList extends AbstractList implements List {
+import java.util.Iterator;
+
+public class ArrayList<T> extends AbstractList<T>{
 
     private static final int DEFAULT_INITIAL_CAPACITY = 2;
-    private Object[] array;
-    private int size;
+    private T[] array;
 
- /*   Iterator iterator(){
 
-    }*/
 
     public ArrayList() {
         this(DEFAULT_INITIAL_CAPACITY);
     }
 
     public ArrayList(int initialCapacity) {
-        array = new Object[initialCapacity];
+        array = (T[]) new Object[initialCapacity];
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(T value, int index) {
         validateIndexForAdd(index);
 
         if (size == array.length) {
-            Object[] newArray = new Object[((array.length * 3) / 2) + 1];
+            Object[] newArray =  new Object[((array.length * 3) / 2) + 1];
 
             System.arraycopy(array, 0, newArray, 0, size);
-            array = newArray;
+            array = (T[]) newArray;
         }
 
         if (size - index >= 0) System.arraycopy(array, index, array, index + 1, size - index);
@@ -36,12 +35,12 @@ public class ArrayList extends AbstractList implements List {
     }
 
     @Override
-    public Object remove(int index) {
+    public  T remove(int index) {
 
         validateIndex(index);
-        Object removedElement = array[index];
+        T removedElement = array[index];
 
-        if (size - index + 1 >= 0) System.arraycopy(array, index + 1, array, index + 1 - 1, size - index + 1);
+        if (size - index > 0) System.arraycopy(array, index + 1, array, index,  size - index - 1);
 
         array[size - 1] = null;
         size--;
@@ -49,15 +48,15 @@ public class ArrayList extends AbstractList implements List {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         validateIndex(index);
         return array[index];
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public T set(T value, int index) {
         validateIndex(index);
-        Object changedElement = array[index];
+        T changedElement = array[index];
         array[index] = value;
         return changedElement;
     }
@@ -73,12 +72,12 @@ public class ArrayList extends AbstractList implements List {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         return indexOf(value) != -1;
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(T value) {
 
         for (int i = 0; i < size; i++) {
 
@@ -91,7 +90,7 @@ public class ArrayList extends AbstractList implements List {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(T value) {
 
         for (int i = size - 1; i >= 0; i--) {
 
@@ -121,6 +120,25 @@ public class ArrayList extends AbstractList implements List {
             builder.append(array[size - 1]);
             builder.append("]");
             return builder.toString();
+        }
+    }
+
+    public Iterator<T> iterator(){
+        return new ArrayListIterator();
+    }
+
+    class ArrayListIterator implements Iterator<T>{
+
+        private int index;
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            return array[index++];
         }
     }
 

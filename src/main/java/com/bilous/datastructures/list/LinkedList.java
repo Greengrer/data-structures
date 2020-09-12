@@ -1,65 +1,60 @@
 package com.bilous.datastructures.list;
 
-public class LinkedList extends AbstractList implements List {
+import java.util.Iterator;
 
-    private int size;
-    private Node head;
-    private Node tail;
+public class LinkedList<T> extends AbstractList<T>{
+
+    private Node<T> head;
+    private Node<T> tail;
 
     @Override
-    public void add(Object value, int index) {
-        Node newNode = new Node(value);
+    public void add(T value, int index) {
+        Node<T> newNode = new Node<>(value);
         validateIndexForAdd(index);
         if (size == 0) {
             head = tail = newNode;
         } else if (index == size) {
-            tail.setNext(newNode);
-            newNode.setPrevious(tail);
+            tail.next = newNode;
+            newNode.previous = tail;
             tail = newNode;
         } else if (index == 0) {
-            tail.setNext(newNode);
-            newNode.setPrevious(tail);
-            tail = newNode;
+            head.previous = newNode;
+            newNode.next = head;
+            head = newNode;
         } else {
-            Node current = getNode(index);
-            newNode.setPrevious(current.getPrevious());
-            newNode.setNext(current);
-            current.setPrevious(newNode);
-            current = newNode.getPrevious();
-            current.setNext(newNode);
+            Node<T> current = getNode(index);
+            newNode.previous = current.previous;
+            newNode.next = current;
+            current.previous = newNode;
+            current = newNode.previous;
+            current.next = newNode;
         }
 
         size++;
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         validateIndex(index);
-        Object removedElement;
+        T removedElement;
 
         if (size == 1) {
-            removedElement = head.getValue();
+            removedElement = head.value;
             head = null;
             tail = null;
-            size--;
-            return removedElement;
-        }
-
-        if (index == 0) {
-            removedElement = head.getValue();
-            head = head.getNext();
-            head.setPrevious(null);
+        }else if (index == 0) {
+            removedElement = head.value;
+            head = head.next;
+            head.previous = null;
         } else if (index == size - 1) {
-            removedElement = tail.getValue();
-            tail = tail.getPrevious();
-            tail.setNext(null);
+            removedElement = tail.value;
+            tail = tail.previous;
+            tail.next = null;
         } else {
-            Node nodeToRemove = getNode(index);
-            removedElement = nodeToRemove.getValue();
-            Node connector = nodeToRemove.getPrevious();
-            connector.setNext(nodeToRemove.getNext());
-            connector = connector.getNext();
-            connector.setPrevious(nodeToRemove.getPrevious());
+            Node<T> nodeToRemove = getNode(index);
+            removedElement = nodeToRemove.value;
+            nodeToRemove.previous.next = nodeToRemove.next;
+            nodeToRemove.next.previous = nodeToRemove.previous;
         }
 
         size--;
@@ -68,31 +63,31 @@ public class LinkedList extends AbstractList implements List {
 
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         validateIndex(index);
-        Node current = getNode(index);
-        return current.getValue();
+        Node<T> current = getNode(index);
+        return current.value;
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public T set(T value, int index) {
         validateIndex(index);
-        Node nodeToChange = getNode(index);
-        Object changedElement = nodeToChange.getValue();
-        nodeToChange.setValue(value);
+        Node<T> nodeToChange = getNode(index);
+        T changedElement = nodeToChange.value;
+        nodeToChange.value = value;
         return changedElement;
     }
 /*
     @Override
     public void clear() {
-        Node currentFromHead = head;
-        Node currentFromTail = tail;
+        Node<T> currentFromHead = head;
+        Node<T> currentFromTail = tail;
 
         for (int i = 0; i < size; i++) {
-            currentFromHead = currentFromHead.getNext();
-            currentFromHead.setPrevious(null);
-            currentFromTail = currentFromTail.getPrevious();
-            currentFromTail.setNext(null);
+            currentFromHead = currentFromHead.next;
+            currentFromHead.previous = null);
+            currentFromTail = currentFromTail.previous;
+            currentFromTail.next = null);
         }
 
         tail = head = null;
@@ -102,14 +97,14 @@ public class LinkedList extends AbstractList implements List {
 
     @Override
     public void clear() {
-        Node current = head;
-        Node next;
+        Node<T> current = head;
+        Node<T> next;
 
         for (int i = 0; i < size; i++) {
-            next = current.getNext();
-            current.setNext(null);
-            current.setPrevious(null);
-            current.setValue(null);
+            next = current.next;
+            current.next = null;
+            current.previous = null;
+            current.value = null;
             current = next;
         }
 
@@ -118,56 +113,56 @@ public class LinkedList extends AbstractList implements List {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         return indexOf(value) != -1;
     }
 
     @Override
-    public int indexOf(Object value) {
-        Node current = head;
+    public int indexOf(T value) {
+        Node<T> current = head;
 
         for (int i = 0; i < size; i++) {
 
-            if (value.equals(current.getValue())) {
+            if (value.equals(current.value)) {
                 return i;
             }
 
-            current = current.getNext();
+            current = current.next;
         }
 
         return -1;
     }
 
     @Override
-    public int lastIndexOf(Object value) {
-        Node current = tail;
+    public int lastIndexOf(T value) {
+        Node<T> current = tail;
 
         for (int i = size - 1; i >= 0; i--) {
 
-            if (value.equals(current.getValue())) {
+            if (value.equals(current.value)) {
                 return i;
             }
 
-            current = current.getPrevious();
+            current = current.previous;
         }
 
         return -1;
     }
 
-    private Node getNode(int index) {
-        Node current;
+    private Node<T> getNode(int index) {
+        Node<T> current;
 
         if (index < size / 2) {
             current = head;
 
             for (int i = 0; i < index; i++) {
-                current = current.getNext();
+                current = current.next;
             }
         } else {
             current = tail;
 
             for (int i = size - 1; i > index; i--) {
-                current = current.getPrevious();
+                current = current.previous;
             }
         }
 
@@ -181,17 +176,53 @@ public class LinkedList extends AbstractList implements List {
         } else {
             StringBuilder builder = new StringBuilder();
             builder.append("[");
-            Node current = head;
+            Node<T> current = head;
 
             for (int i = 0; i < size - 1; i++) {
-                builder.append(current.getValue());
+                builder.append(current.value);
                 builder.append(", ");
-                current = current.getNext();
+                current = current.next;
             }
 
-            builder.append(tail.getValue());
+            builder.append(tail.value);
             builder.append("]");
             return builder.toString();
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListIterator();
+    }
+
+    private class Node<T> {
+
+        private T value;
+        private Node<T> next;
+        private Node<T> previous;
+
+        public Node(T value) {
+            this.value = value;
+        }
+
+    }
+
+    private class LinkedListIterator implements Iterator<T>{
+
+        private int step;
+        private Node<T> current = head;
+
+        @Override
+        public boolean hasNext() {
+            return step < size;
+        }
+
+        @Override
+        public T next() {
+            T value = current.value;
+            current = current.next;
+            step++;
+            return value;
         }
     }
 
