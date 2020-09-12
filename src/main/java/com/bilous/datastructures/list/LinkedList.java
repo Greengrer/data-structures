@@ -4,12 +4,12 @@ import java.util.Iterator;
 
 public class LinkedList<T> extends AbstractList<T>{
 
-    private Node<T> head;
-    private Node<T> tail;
+    private LinkedList.Node<T> head;
+    private LinkedList.Node<T> tail;
 
     @Override
     public void add(T value, int index) {
-        Node<T> newNode = new Node<>(value);
+        LinkedList.Node<T> newNode = new LinkedList.Node<>(value);
         validateIndexForAdd(index);
         if (size == 0) {
             head = tail = newNode;
@@ -22,7 +22,7 @@ public class LinkedList<T> extends AbstractList<T>{
             newNode.next = head;
             head = newNode;
         } else {
-            Node<T> current = getNode(index);
+            LinkedList.Node<T> current = getNode(index);
             newNode.previous = current.previous;
             newNode.next = current;
             current.previous = newNode;
@@ -51,7 +51,7 @@ public class LinkedList<T> extends AbstractList<T>{
             tail = tail.previous;
             tail.next = null;
         } else {
-            Node<T> nodeToRemove = getNode(index);
+            LinkedList.Node<T> nodeToRemove = getNode(index);
             removedElement = nodeToRemove.value;
             nodeToRemove.previous.next = nodeToRemove.next;
             nodeToRemove.next.previous = nodeToRemove.previous;
@@ -65,14 +65,14 @@ public class LinkedList<T> extends AbstractList<T>{
     @Override
     public T get(int index) {
         validateIndex(index);
-        Node<T> current = getNode(index);
+        LinkedList.Node<T> current = getNode(index);
         return current.value;
     }
 
     @Override
     public T set(T value, int index) {
         validateIndex(index);
-        Node<T> nodeToChange = getNode(index);
+        LinkedList.Node<T> nodeToChange = getNode(index);
         T changedElement = nodeToChange.value;
         nodeToChange.value = value;
         return changedElement;
@@ -97,8 +97,8 @@ public class LinkedList<T> extends AbstractList<T>{
 
     @Override
     public void clear() {
-        Node<T> current = head;
-        Node<T> next;
+        LinkedList.Node<T> current = head;
+        LinkedList.Node<T> next;
 
         for (int i = 0; i < size; i++) {
             next = current.next;
@@ -119,7 +119,7 @@ public class LinkedList<T> extends AbstractList<T>{
 
     @Override
     public int indexOf(T value) {
-        Node<T> current = head;
+        LinkedList.Node<T> current = head;
 
         for (int i = 0; i < size; i++) {
 
@@ -135,7 +135,7 @@ public class LinkedList<T> extends AbstractList<T>{
 
     @Override
     public int lastIndexOf(T value) {
-        Node<T> current = tail;
+        LinkedList.Node<T> current = tail;
 
         for (int i = size - 1; i >= 0; i--) {
 
@@ -149,8 +149,8 @@ public class LinkedList<T> extends AbstractList<T>{
         return -1;
     }
 
-    private Node<T> getNode(int index) {
-        Node<T> current;
+    private LinkedList.Node<T> getNode(int index) {
+        LinkedList.Node<T> current;
 
         if (index < size / 2) {
             current = head;
@@ -176,7 +176,7 @@ public class LinkedList<T> extends AbstractList<T>{
         } else {
             StringBuilder builder = new StringBuilder();
             builder.append("[");
-            Node<T> current = head;
+            LinkedList.Node<T> current = head;
 
             for (int i = 0; i < size - 1; i++) {
                 builder.append(current.value);
@@ -192,10 +192,10 @@ public class LinkedList<T> extends AbstractList<T>{
 
     @Override
     public Iterator<T> iterator() {
-        return new LinkedListIterator();
+        return new LinkedList<T>.LinkedListIterator();
     }
 
-    private class Node<T> {
+    private static class Node<T> {
 
         private T value;
         private Node<T> next;
@@ -210,7 +210,7 @@ public class LinkedList<T> extends AbstractList<T>{
     private class LinkedListIterator implements Iterator<T>{
 
         private int step;
-        private Node<T> current = head;
+        private LinkedList.Node<T> current = head;
 
         @Override
         public boolean hasNext() {
