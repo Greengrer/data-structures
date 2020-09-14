@@ -2,7 +2,7 @@ package com.bilous.datastructures.list;
 
 import java.util.Iterator;
 
-public class LinkedList<T> extends AbstractList<T>{
+public class LinkedList<T> extends AbstractList<T> {
 
     private LinkedList.Node<T> head;
     private LinkedList.Node<T> tail;
@@ -42,7 +42,7 @@ public class LinkedList<T> extends AbstractList<T>{
             removedElement = head.value;
             head = null;
             tail = null;
-        }else if (index == 0) {
+        } else if (index == 0) {
             removedElement = head.value;
             head = head.next;
             head.previous = null;
@@ -207,23 +207,34 @@ public class LinkedList<T> extends AbstractList<T>{
 
     }
 
-    private class LinkedListIterator implements Iterator<T>{
+    private class LinkedListIterator implements Iterator<T> {
 
-        private int step;
+        private int index = 0;
+        private boolean isRemoveLegal = false;
         private LinkedList.Node<T> current = head;
 
         @Override
         public boolean hasNext() {
-            return step < size;
+            return index < size;
         }
 
         @Override
         public T next() {
             T value = current.value;
             current = current.next;
-            step++;
+            index++;
+            isRemoveLegal = true;
             return value;
         }
-    }
 
+        @Override
+        public void remove() {
+            if (isRemoveLegal) {
+                LinkedList.this.remove(index - 1);
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+
+    }
 }

@@ -22,10 +22,10 @@ public class ArrayList<T> extends AbstractList<T>{
         validateIndexForAdd(index);
 
         if (size == array.length) {
-            Object[] newArray =  new Object[((array.length * 3) / 2) + 1];
+            T[] newArray = (T[]) new Object[((array.length * 3) / 2) + 1];
 
             System.arraycopy(array, 0, newArray, 0, size);
-            array = (T[]) newArray;
+            array = newArray;
         }
 
         if (size - index >= 0) System.arraycopy(array, index, array, index + 1, size - index);
@@ -130,6 +130,7 @@ public class ArrayList<T> extends AbstractList<T>{
     class ArrayListIterator implements Iterator<T>{
 
         private int index;
+        private boolean isRemoveLegal = false;
 
         @Override
         public boolean hasNext() {
@@ -138,7 +139,18 @@ public class ArrayList<T> extends AbstractList<T>{
 
         @Override
         public T next() {
+            isRemoveLegal = true;
             return array[index++];
+        }
+
+        @Override
+        public void remove() {
+            if (isRemoveLegal) {
+                ArrayList.this.remove(index);
+            } else {
+                throw new IllegalStateException();
+            }
+            isRemoveLegal = false;
         }
     }
 
